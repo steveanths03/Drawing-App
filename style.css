@@ -1,0 +1,14 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.toolbar {
+    margin-bottom: 10px;
+}
+
+canvas {
+    border: 2px solid black;
+    cursor: crosshair;
+    background-color: white;
+}
