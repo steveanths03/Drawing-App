@@ -3,29 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Drawing App</title>
+    <title>Creative Canvas - Drawing App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Creative Canvas</h1>
+            <div class="user-profile">
+                <img src="/api/placeholder/40/40" alt="User" class="profile-pic">
+                <span class="username">Artist</span>
+            </div>
+        </header>
 
-    <div class="container">
-        <h2>Drawing App</h2>
+        <div class="drawing-workspace">
+            <div class="toolbar">
+                <div class="tool-section drawing-tools">
+                    <button class="tool-btn active" data-tool="pencil">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <button class="tool-btn" data-tool="brush">
+                        <i class="fas fa-paint-brush"></i>
+                    </button>
+                    <button class="tool-btn" data-tool="eraser">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+                </div>
 
-        <div class="toolbar">
-            <button onclick="clearCanvas()">Clear</button>
-            <button onclick="undo()">Undo</button>
-            <button onclick="redo()">Redo</button>
-            <button onclick="saveCanvas()">Save</button>
-            <input type="color" id="colorPicker" onchange="changeColor(this.value)">
-            <input type="range" id="penSize" min="1" max="10" value="3" onchange="changePenSize(this.value)">
-        </div>
+                <div class="tool-section color-tools">
+                    <input type="color" id="colorPicker" class="color-picker">
+                    <div class="preset-colors">
+                        <div class="color-swatch" data-color="#FF6B6B"></div>
+                        <div class="color-swatch" data-color="#4ECDC4"></div>
+                        <div class="color-swatch" data-color="#45B7D1"></div>
+                        <div class="color-swatch" data-color="#FDCB6E"></div>
+                    </div>
+                </div>
 
-        <div class="canvas-container">
-            <canvas id="drawingCanvas"></canvas>
+                <div class="tool-section action-tools">
+                    <button onclick="undo()" class="action-btn">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button onclick="redo()" class="action-btn">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button onclick="clearCanvas()" class="action-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button onclick="saveCanvas()" class="action-btn">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </div>
+
+                <div class="tool-section size-tools">
+                    <input type="range" id="penSize" min="1" max="50" value="5">
+                    <div class="size-indicator"></div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="drawingCanvas"></canvas>
+                <div class="canvas-overlay"></div>
+            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>
