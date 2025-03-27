@@ -1,11 +1,11 @@
 const canvas = document.getElementById("drawingCanvas");
 const ctx = canvas.getContext("2d");
-
 let drawing = false;
 let paths = [];
 let undonePaths = [];
-let color = "#000000"; 
-let penSize = 3;
+let currentTool = 'pencil';
+let color = "#FF6B6B"; 
+let penSize = 5;
 
 // Resize canvas dynamically
 function resizeCanvas() {
@@ -15,11 +15,42 @@ function resizeCanvas() {
     redrawCanvas();
 }
 
+// Tool Selection
+document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTool = btn.dataset.tool;
+    });
+});
+
+// Preset Color Swatches
+document.querySelectorAll('.color-swatch').forEach(swatch => {
+    swatch.style.backgroundColor = swatch.dataset.color;
+    swatch.addEventListener('click', () => {
+        color = swatch.dataset.color;
+        document.getElementById('colorPicker').value = color;
+    });
+});
+
+// Color Picker
+document.getElementById('colorPicker').addEventListener('change', (e) => {
+    color = e.target.value;
+});
+
+// Pen Size Indicator
+const sizeIndicator = document.querySelector('.size-indicator');
+document.getElementById('penSize').addEventListener('input', (e) => {
+    penSize = e.target.value;
+    sizeIndicator.style.width = `${penSize * 2}px`;
+    sizeIndicator.style.height = `${penSize * 2}px`;
+});
+
 // Initialize canvas size on load
 window.onload = resizeCanvas;
 window.onresize = resizeCanvas;
 
-// Mouse and Touch Event Listeners
+// Event Listeners
 canvas.addEventListener("mousedown", startDrawing);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", stopDrawing);
@@ -31,7 +62,12 @@ canvas.addEventListener("touchend", stopDrawing);
 // Start Drawing
 function startDrawing(event) {
     drawing = true;
-    const path = { points: [], color: ctx.strokeStyle, width: ctx.lineWidth };
+    const path = { 
+        points: [], 
+        color: color, 
+        width: penSize, 
+        tool: currentTool 
+    };
     paths.push(path);
     addPoint(event, path);
 }
@@ -72,6 +108,9 @@ function redrawCanvas() {
     paths.forEach(path => {
         ctx.strokeStyle = path.color;
         ctx.lineWidth = path.width;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
         ctx.beginPath();
         path.points.forEach((point, index) => {
             if (index === 0) ctx.moveTo(point.x, point.y);
@@ -108,16 +147,6 @@ function redo() {
 function saveCanvas() {
     const link = document.createElement("a");
     link.href = canvas.toDataURL();
-    link.download = "drawing.png";
+    link.download = `creative-canvas-${new Date().toISOString().slice(0,10)}.png`;
     link.click();
-}
-
-// Change Pen Color
-function changeColor(newColor) {
-    ctx.strokeStyle = newColor;
-}
-
-// Change Pen Size
-function changePenSize(newSize) {
-    ctx.lineWidth = newSize;
 }
